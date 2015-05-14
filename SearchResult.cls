@@ -22,6 +22,8 @@ Public totalPage    As String
 Public page         As String
 Public chargeYN     As Boolean
 Public juso         As Collection
+Public sidoCount    As sidoCount
+
 
 Public Sub fromDictionary(dic As Variant)
     searches = dic.Item("searches")
@@ -31,6 +33,13 @@ Public Sub fromDictionary(dic As Variant)
     totalPage = dic.Item("totalPage")
     page = dic.Item("page")
     chargeYN = dic.Item("chargeYN")
+    
+    If IsEmpty(dic.Item("sidoCount")) = False Then
+    
+        Set sidoCount = New sidoCount
+        sidoCount.fromDictionary dic.Item("sidoCount")
+    End If
+    
         
     If IsEmpty(dic.Item("deletedWord")) = False Then
            Set deletedWord = dic.Item("deletedWord")
