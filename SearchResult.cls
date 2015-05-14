@@ -32,29 +32,25 @@ Public Sub fromDictionary(dic As Variant)
     page = dic.Item("page")
     chargeYN = dic.Item("chargeYN")
         
-    Dim tCollection As Collection
+    If IsEmpty(dic.Item("juso")) = False Then
+        Dim tCollection As Collection
+        Set tCollection = dic.Item("juso")
     
-    Set tCollection = dic.Item("juso")
-    
-    If (tCollection Is Nothing) = False Then
-        Set juso = New Collection
-        
-        Dim T As Variant
-        
-        Dim info As JusoInfo
+        If (tCollection Is Nothing) = False Then
+            Set juso = New Collection
+            Dim T As Variant
+            Dim info As JusoInfo
             
-        For Each T In tCollection
-            Set info = New JusoInfo
-            info.fromDictionary T
-            juso.Add info
-        Next
-    
-    End If
+            For Each T In tCollection
+                Set info = New JusoInfo
+                info.fromDictionary T
+                juso.Add info
+            Next
+        End If
         
-    If IsEmpty(dic.Item("deletedWord")) = False Then
-
-       Set deletedWord = dic.Item("deletedWord")
-       
+        If IsEmpty(dic.Item("deletedWord")) = False Then
+           Set deletedWord = dic.Item("deletedWord")
+        End If
     End If
     
 End Sub
