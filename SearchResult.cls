@@ -32,6 +32,11 @@ Public Sub fromDictionary(dic As Variant)
     page = dic.Item("page")
     chargeYN = dic.Item("chargeYN")
         
+    If IsEmpty(dic.Item("deletedWord")) = False Then
+           Set deletedWord = dic.Item("deletedWord")
+    End If
+        
+    
     If IsEmpty(dic.Item("juso")) = False Then
         Dim tCollection As Collection
         Set tCollection = dic.Item("juso")
@@ -47,10 +52,7 @@ Public Sub fromDictionary(dic As Variant)
                 juso.Add info
             Next
         End If
-        
-        If IsEmpty(dic.Item("deletedWord")) = False Then
-           Set deletedWord = dic.Item("deletedWord")
-        End If
+                
     End If
     
 End Sub
