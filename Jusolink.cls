@@ -249,7 +249,6 @@ Public Function Search(Index As String, PageNum As Integer, PerPage As Integer, 
     If PageNum < 1 Then PageNum = Null
     If PerPage <> 0 Then
         If PerPage < 0 Then PerPage = 20
-        If PerPage > 100 Then PerPage = 100
     End If
     
     url = "/Search?Searches=" + URLEncode(Index)
