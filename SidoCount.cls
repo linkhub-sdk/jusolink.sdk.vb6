@@ -14,22 +14,22 @@ Attribute VB_Exposed = False
 Option Explicit
 
 Public GYEONGGI         As Integer
-Public GYEONGSANGBUK    As Integer
-Public GYEONGSANGNAM    As Integer
-Public SEOUL            As Integer
-Public JEOLLANAM        As Integer
-Public CHUNGCHEONGNAM   As Integer
-Public JEOLLABUK        As Integer
-Public BUSAN            As Integer
-Public GANGWON          As Integer
-Public CHUNGCHEONGBUK   As Integer
-Public DAEGU            As Integer
-Public INCHEON          As Integer
-Public GWANGJU          As Integer
-Public JEJU             As Integer
-Public DAEJEON          As Integer
-Public ULSAN            As Integer
-Public SEJONG           As Integer
+Public GYEONGSANGBUK    As Long
+Public GYEONGSANGNAM    As Long
+Public SEOUL            As Long
+Public JEOLLANAM        As Long
+Public CHUNGCHEONGNAM   As Long
+Public JEOLLABUK        As Long
+Public BUSAN            As Long
+Public GANGWON          As Long
+Public CHUNGCHEONGBUK   As Long
+Public DAEGU            As Long
+Public INCHEON          As Long
+Public GWANGJU          As Long
+Public JEJU             As Long
+Public DAEJEON          As Long
+Public ULSAN            As Long
+Public SEJONG           As Long
 
 Public Sub fromDictionary(dic As Variant)
 
