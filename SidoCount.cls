@@ -13,7 +13,7 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 
-Public GYEONGGI         As Integer
+Public GYEONGGI         As Long
 Public GYEONGSANGBUK    As Long
 Public GYEONGSANGNAM    As Long
 Public SEOUL            As Long
