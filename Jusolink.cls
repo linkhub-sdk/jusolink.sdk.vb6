@@ -26,7 +26,7 @@ Option Explicit
 '
 ' Thanks for your interest.
 '=================================================================================
-Private Const ServiceID = "JUSOLINK"
+Private Const serviceID = "JUSOLINK"
 Private Const ServiceURL = "https://juso.linkhub.co.kr"
 Private Const APIVersion = "1.0"
 
@@ -34,20 +34,13 @@ Private Const adTypeBinary As Long = 1
 Private Const adTypeText As Long = 2
 Private Const adModeReadWrite As Long = 3
 
-Private m_token_Dic
+Private m_Token As LinkhubToken
 Private m_Linkhub As Linkhub
 Private m_scope As New Collection
 Private m_LastErrCode As Long
 Private m_LastErrMessage As String
 
 Private Declare Sub CopyMemory Lib "kernel32" Alias "RtlMoveMemory" (Destination As Any, Source As Any, ByVal Length As Long)
-Private Sub Class_Initialize()
-    Set m_token_Dic = CreateObject("Scripting.Dictionary")
-End Sub
-Private Sub Class_Terminate()
-     m_token_Dic.RemoveAll
-    Set m_token_Dic = Nothing
-End Sub
 Private Function UniStrToUTF8(UniString) As Byte()
    ' Convert a Unicode string to a byte stream of UTF-8
    Dim BArray() As Byte
@@ -122,15 +115,7 @@ Private Function getSession_token() As String
     Dim refresh As Boolean
     
     refresh = False
-    
-    Dim m_Token As LinkhubToken
-    
-    Set m_Token = Nothing
-    
-    If m_token_Dic.Exists("token") Then
-        Set m_Token = m_token_Dic.Item("token")
-    End If
-    
+       
     If m_Token Is Nothing Then
         refresh = True
     Else
@@ -141,14 +126,12 @@ Private Function getSession_token() As String
     
     If refresh Then
     
-        Set m_Token = m_Linkhub.getToken(ServiceID, "", m_scope)
+        Set m_Token = m_Linkhub.getToken(serviceID, "", m_scope)
         
         If m_Token Is Nothing Then
             Err.Raise m_Linkhub.LastErrCode, "JUSOLINK", m_Linkhub.LastErrMessage
             Exit Function
         End If
-        
-        m_token_Dic.Add "token", m_Token
         
     End If
     
@@ -287,7 +270,7 @@ End Function
 Public Function GetBalance() As Double
     On Error GoTo ErrHandler
     
-    GetBalance = m_Linkhub.GetPartnerBalance(getSession_token(), ServiceID)
+    GetBalance = m_Linkhub.GetPartnerBalance(getSession_token(), serviceID)
     
     Exit Function
 ErrHandler:
@@ -311,6 +294,7 @@ ErrHandler:
     GetUnitCost = m_LastErrCode
 
 End Function
+
 
 
 
