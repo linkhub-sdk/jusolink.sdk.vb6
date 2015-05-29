@@ -204,7 +204,7 @@ End Function
 Public Function ADO_EncodeUTF8(ByVal strUTF16 As String) As Byte()
  
    Dim objStream        As Object
-   Dim data()           As Byte
+   Dim Data()           As Byte
  
    Set objStream = CreateObject("ADODB.Stream")
    objStream.Charset = "utf-8"
@@ -216,32 +216,36 @@ Public Function ADO_EncodeUTF8(ByVal strUTF16 As String) As Byte()
    objStream.Position = 0
    objStream.Type = adTypeBinary
    objStream.Read 3 ' skip BOM
-   data = objStream.Read()
+   Data = objStream.Read()
    objStream.Close
-   ADO_EncodeUTF8 = data
+   ADO_EncodeUTF8 = Data
  
 End Function
 
 '주소검색
-Public Function Search(Index As String, PageNum As Integer, PerPage As Integer, noDiff As Boolean, noSuggest As Boolean) As SearchResult
+Public Function Search(index As String, pageNum As Integer, perPage As Integer, noDiff As Boolean, noSuggest As Boolean) As SearchResult
     On Error GoTo ErrHandler
     
     Dim Result As Variant
     Dim url As String
     
-    If PageNum < 1 Then PageNum = Null
-    If PerPage <> 0 Then
-        If PerPage < 0 Then PerPage = 20
+    If Len(index) = 0 Then
+        Err.Raise -99999999, "JUSOLINK", "검색어가 입력되지 않았습니다."
     End If
     
-    url = "/Search?Searches=" + URLEncode(Index)
-    
-    If PageNum <> 0 Then
-        url = url + "&PageNum=" + CStr(PageNum)
+    If pageNum < 1 Then pageNum = Null
+    If perPage <> 0 Then
+        If perPage < 0 Then perPage = 20
     End If
     
-    If PerPage <> 0 Then
-        url = url + "&PerPage=" + CStr(PerPage)
+    url = "/Search?Searches=" + URLEncode(index)
+    
+    If pageNum <> 0 Then
+        url = url + "&PageNum=" + CStr(pageNum)
+    End If
+    
+    If perPage <> 0 Then
+        url = url + "&PerPage=" + CStr(perPage)
     End If
     
     If noSuggest Then
