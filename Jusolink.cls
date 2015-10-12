@@ -120,7 +120,7 @@ Private Function getSession_token() As String
         refresh = True
     Else
         Dim utcnow As String
-        utcnow = Format(m_Linkhub.UTCTime, "yyyy-MM-ddTHH:mm:ss.sssZ")
+        utcnow = m_Linkhub.GetTime()
         refresh = m_Token.expiration < utcnow
     End If
     
@@ -151,7 +151,7 @@ Private Function httpGET(url As String, BearerToken As String, Optional UserID A
     Call winhttp1.setRequestHeader("x-api-version", APIVersion)
     
     
-    winhttp1.send
+    winhttp1.Send
     winhttp1.WaitForResponse
     
     Dim Response As String
