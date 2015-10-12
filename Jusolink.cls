@@ -144,16 +144,16 @@ Private Function httpGET(url As String, BearerToken As String, Optional UserID A
      
     Dim winhttp1
     
-    Set winhttp1 = CreateObject("WinHttp.WinHttpRequest.5.1")
-    Call winhttp1.Open("GET", ServiceURL + url)
+    Set winhttp1 = CreateObject("MSXML2.XMLHTTP.6.0")
+    Call winhttp1.Open("GET", ServiceURL + url, False)
     
     Call winhttp1.setRequestHeader("Authorization", "Bearer " + BearerToken)
     Call winhttp1.setRequestHeader("x-api-version", APIVersion)
+    Call winhttp1.setRequestHeader("Accept-Encoding", "gzip,deflate")
     
     
     winhttp1.Send
-    winhttp1.WaitForResponse
-    
+        
     Dim Response As String
     Response = winhttp1.responseText
        
