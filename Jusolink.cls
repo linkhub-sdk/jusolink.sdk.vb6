@@ -23,7 +23,7 @@ Option Explicit
 ' http://www.jusolink.com
 ' Author : Jeong Yoohan (yhjeong@linkhub.co.kr)
 ' Written : 2015-05-07
-'
+' Updated : 2022-10-24
 ' Thanks for your interest.
 '=================================================================================
 Private Const serviceID = "JUSOLINK"
@@ -40,7 +40,47 @@ Private m_scope As New Collection
 Private m_LastErrCode As Long
 Private m_LastErrMessage As String
 
+Private m_IsTest As Boolean
+Private m_IPRestrictOnOff As Boolean
+Private m_UseStaticIP As Boolean
+Private m_UseGAIP As Boolean
+Private m_UseLocalTimeYN As Boolean
+Private m_token_Dic
+
 Private Declare Sub CopyMemory Lib "kernel32" Alias "RtlMoveMemory" (Destination As Any, Source As Any, ByVal Length As Long)
+
+Private Sub Class_Initialize()
+    Set m_token_Dic = CreateObject("Scripting.Dictionary")
+End Sub
+'최근 오류코드 확인
+Public Property Get LastErrCode() As Long
+    LastErrCode = m_LastErrCode
+End Property
+'최근오류메시지 확인
+Public Property Get LastErrMessage() As String
+    LastErrMessage = m_LastErrMessage
+End Property
+'테스트 플래그
+Public Property Let IsTest(ByVal value As Boolean)
+    m_IsTest = value
+End Property
+
+Public Property Let IPRestrictOnOff(ByVal value As Boolean)
+    m_IPRestrictOnOff = value
+End Property
+
+Public Property Let UseStaticIP(ByVal value As Boolean)
+    m_UseStaticIP = value
+End Property
+
+Public Property Let UseGAIP(ByVal value As Boolean)
+    m_UseGAIP = value
+End Property
+
+Public Property Let UseLocalTimeYN(ByVal value As Boolean)
+    m_UseLocalTimeYN = value
+End Property
+
 Private Function UniStrToUTF8(UniString) As Byte()
    ' Convert a Unicode string to a byte stream of UTF-8
    Dim BArray() As Byte
@@ -95,14 +135,7 @@ Private Function ToUTF8(ByVal UTF16 As Long) As Byte()
    End If
    ToUTF8 = BArray  ' Return UTF-8 bytes in an array
 End Function
-'최근 오류코드 확인
-Public Property Get LastErrCode() As Long
-    LastErrCode = m_LastErrCode
-End Property
-'최근오류메시지 확인
-Public Property Get LastErrMessage() As String
-    LastErrMessage = m_LastErrMessage
-End Property
+
 '초기화
 Public Sub Initialize(linkID As String, SecretKey As String)
     Set m_Linkhub = New Linkhub
@@ -110,6 +143,12 @@ Public Sub Initialize(linkID As String, SecretKey As String)
     m_Linkhub.SercetKey = SecretKey
        
     m_scope.Add "200"
+    
+    m_IsTest = False
+    m_IPRestrictOnOff = True
+    m_UseStaticIP = False
+    m_UseGAIP = False
+    m_UseLocalTimeYN = False
 End Sub
 Private Function getSession_token() As String
     Dim refresh As Boolean
@@ -120,13 +159,13 @@ Private Function getSession_token() As String
         refresh = True
     Else
         Dim utcnow As String
-        utcnow = m_Linkhub.GetTime()
+        utcnow = m_Linkhub.GetTime(m_UseStaticIP, m_UseGAIP, m_UseLocalTimeYN)
         refresh = m_Token.expiration < utcnow
     End If
     
     If refresh Then
     
-        Set m_Token = m_Linkhub.getToken(serviceID, "", m_scope)
+        Set m_Token = m_Linkhub.getToken(serviceID, "", m_scope, IIf(m_IPRestrictOnOff, "", "*"), m_UseStaticIP, m_UseGAIP, m_UseLocalTimeYN)
         
         If m_Token Is Nothing Then
             Err.Raise m_Linkhub.LastErrCode, "JUSOLINK", m_Linkhub.LastErrMessage
@@ -274,7 +313,7 @@ End Function
 Public Function GetBalance() As Double
     On Error GoTo ErrHandler
     
-    GetBalance = m_Linkhub.GetPartnerBalance(getSession_token(), serviceID)
+    GetBalance = m_Linkhub.GetPartnerBalance(getSession_token(), serviceID, m_UseStaticIP, m_UseGAIP)
     
     Exit Function
 ErrHandler:
@@ -298,7 +337,4 @@ ErrHandler:
     GetUnitCost = m_LastErrCode
 
 End Function
-
-
-
 
