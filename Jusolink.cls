@@ -40,7 +40,6 @@ Private m_scope As New Collection
 Private m_LastErrCode As Long
 Private m_LastErrMessage As String
 
-Private m_IsTest As Boolean
 Private m_IPRestrictOnOff As Boolean
 Private m_UseStaticIP As Boolean
 Private m_UseGAIP As Boolean
@@ -59,10 +58,6 @@ End Property
 '최근오류메시지 확인
 Public Property Get LastErrMessage() As String
     LastErrMessage = m_LastErrMessage
-End Property
-'테스트 플래그
-Public Property Let IsTest(ByVal value As Boolean)
-    m_IsTest = value
 End Property
 
 Public Property Let IPRestrictOnOff(ByVal value As Boolean)
@@ -144,7 +139,6 @@ Public Sub Initialize(linkID As String, SecretKey As String)
        
     m_scope.Add "200"
     
-    m_IsTest = False
     m_IPRestrictOnOff = True
     m_UseStaticIP = False
     m_UseGAIP = False
